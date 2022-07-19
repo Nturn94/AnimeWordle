@@ -72,16 +72,32 @@ class ImageController extends Controller
             setcookie("consec", $consec,  "/");
             setcookie("win", $win,  "/");
             setcookie("fail", $fail,  "/");
+            setcookie("guesslist", "",  "/");
         }
         if($_COOKIE["dayno"] != $days) {
             setcookie("dayno", $days,  "/");
             setcookie("guessno", $guessno,  "/");
             setcookie("win", $win,  "/");
             setcookie("fail", $fail,  "/");
+            setcookie("guesslist", "",  "/");
         }
         $input = $request->guess;
-        // $input = $_POST['guess'];
-        $answer = strtolower($request->animu);
+        if (empty($input)){
+            $input = "-";
+        }
+
+
+        $startday = new DateTime('2022-06-08');
+        $today = new DateTime();
+        $days  = $today->diff($startday)->format('%a')+4;
+
+
+        $sql = "select * from postanime";
+        $animes = DB::select($sql); 
+
+
+        $id = ($animes[$days])->name;
+        $answer = strtolower($id);
         $input = strtolower($input);
         // $answer = strtolower($_POST['animu']);
         $guessno = $_COOKIE["guessno"] + 1;
@@ -96,11 +112,26 @@ class ImageController extends Controller
 
     
         }
-        elseif($_COOKIE["guessno"] >5){
+        if($_COOKIE["guessno"] >5){
             $consec = 0;
             setcookie("consec", $consec,  "/");
             $fail = 1;
             setcookie("fail", $fail, "/");
+        }
+        if($input != $answer){
+            $input .= "&#10060; ";
+        }
+        $binput = "<p class='guesslisto'>" . $input . "</p>";
+
+
+        if (isset($_COOKIE["guesslist"])){
+            $tempcookie = $_COOKIE["guesslist"];
+            $tempcookie .= " ";
+            $tempcookie .= $binput;
+            setcookie("guesslist", $tempcookie,  "/");
+
+        }elseif (empty($_COOKIE["guesslist"])){
+            setcookie("guesslist", $binput,  "/");
         }
 
         return redirect('/');
@@ -148,3 +179,21 @@ class ImageController extends Controller
     }
 }
 
+function data_stringify($data) {
+  switch (gettype($data)) {
+    case 'string' : return '\''.addcslashes($data, "'\\").'\'';
+    case 'boolean': return $data ? 'true' : 'false';
+    case 'NULL'   : return 'null';
+    case 'object' :
+    case 'array'  :
+      $expressions = [];
+      foreach ($data as $c_key => $c_value) {
+        $expressions[] = data_stringify($c_key).' => '.
+                         data_stringify($c_value);
+      }
+      return gettype($data) === 'object' ?
+        '(object)['.implode(', ', $expressions).']' :
+                '['.implode(', ', $expressions).']';
+    default: return (string)$data;
+  }
+}

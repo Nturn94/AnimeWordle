@@ -10,8 +10,23 @@
 <div style="  margin: auto; width: 50%; text-align: center;">
   
 
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="black" stroke="#FFA500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="10"></circle>
+  <line x1="12" y1="16" x2="12" y2="12"></line>
+  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+</svg>
 
-  <img src="{{ asset('img/title.png') }}">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="black" stroke="#FFA500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+
+<img src="{{ asset('img/title.png') }}">
+
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="black" stroke="#FFA500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6M6 20V10M18 20V4"></path></svg>
+
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="black" stroke="#FFA500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+
+
+
+
 </div>
 
 <!-- <h1 style="margin-left: auto; margin-right: auto;"> Hello world </h1> -->
@@ -57,6 +72,7 @@ $win = 0;
 $fail = 0;
 $days = $days;
 
+$currentimg = $animes[$days]->image;
 
 
 // setcookie("dayno", $days, "/");
@@ -64,6 +80,7 @@ $days = $days;
 // setcookie("consec", $consec, "/");
 // setcookie("win", $win, "/");
 // setcookie("fail", $fail, "/");
+// setcookie("guesslist", "", "/");
 
 
 if(!isset($_COOKIE["dayno"])) {
@@ -72,17 +89,16 @@ if(!isset($_COOKIE["dayno"])) {
     setcookie("consec", 0,  "/");
     setcookie("win", 0,   "/");
     setcookie("fail", 0,  "/");
+    setcookie("guesslist", "",  "/");
 }
 if($_COOKIE["dayno"] != $days) {
     setcookie("dayno", $days,  "/");
     setcookie("guessno", 0,  "/");
     setcookie("win", 0,  "/");
     setcookie("fail", 0,  "/");
+    setcookie("guesslist", "",  "/");
     header('Refresh: 0');
 }
-
-
-
 
 // echo "<br>This is nubers". $_COOKIE['dayno'], $days;
 
@@ -91,12 +107,12 @@ if($_COOKIE["win"] == 1){
     echo '<div style="  margin: auto; width: 50%; text-align: center;">';
     echo '    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
-    <button onclick="toggleText()" id="Stupoo" ><img src='.asset("img/box.jpg") . ' id="btn1"></button>
-    <button onclick="toggle2()" ><img src='.asset("img/box.jpg") . ' style="font-size:0" id="btn2"></button>
-    <button onclick="toggle3()" ><img src='.asset("img/box.jpg") . ' id="btn3" class="img-btn"></button>
-    <button onclick="toggle4()" ><img src='.asset("img/box.jpg") . ' id="btn4" class="img-btn"></button>
-    <button onclick="toggle5()" ><img src='.asset("img/box.jpg") . ' id="btn5" class="img-btn"></button>
-    <button onclick="toggle6()" ><img src='.asset("img/greenbox.jpg") . ' id="btn6"></button>
+    <button onclick="toggleText()" id="Stupoo" style="padding:0; width:auto; height:auto" ><img src='.asset("img/box.jpg") . ' id="btn1" class="img-btn"></button>
+    <button onclick="toggle2()" style="padding:0; width:auto; height:auto" ><img src='.asset("img/box.jpg") . ' id="btn2" class="img-btn"></button>
+    <button onclick="toggle3()" style="padding:0; width:auto; height:auto" ><img src='.asset("img/box.jpg") . ' id="btn3" class="img-btn"></button>
+    <button onclick="toggle4()" style="padding:0; width:auto; height:auto" ><img src='.asset("img/box.jpg") . ' id="btn4" class="img-btn"></button>
+    <button onclick="toggle5()" style="padding:0; width:auto; height:auto" ><img src='.asset("img/box.jpg") . ' id="btn5" class="img-btn"></button>
+    <button onclick="toggle6()" style="padding:0; width:auto; height:auto" ><img src='.asset("img/greenbox.jpg") . ' id="btn6" class="img-btn"></button>
     <img src= ' .$animes[$days]->image. ' id="Myid6" class="aniimg" width="600" height="400" style="position: absolute; top: 125px; right: 650px;">
     <img src= ' .$animes[$days]->image2. ' id="Myid" class="aniimg" width="600" height="400" style="position: absolute; top: 125px; right: 650px;">
     <img src= ' .$animes[$days]->image3. ' id="Myid2" class="aniimg" width="600" height="400" style="position: absolute; top: 125px; right: 650px;">
@@ -106,23 +122,19 @@ if($_COOKIE["win"] == 1){
 
     ';
 
-    echo '<h1 style="color:white; ">You win in ' .$_COOKIE["guessno"]. ' </h1>';
+    echo '<h1 style="color:white; ">You win in ' .$_COOKIE["guessno"]. ' guesses! </h1>';
     echo '<p style="color:white; ">It was: '. $animes[$days]->name. '</p>';
     echo "<p style='color:white; ;'>You're at ". $_COOKIE["consec"]. " in a row! </p>";
     
 
 
-    echo '
+    echo '<h3> Previous guesses</h3> ';
+    echo $_COOKIE["guesslist"];
 
-
-    </div>
-
-    
-        
+    echo '</div>';
 
 
 
-    ';
 
 
 
@@ -137,18 +149,16 @@ if($_COOKIE["fail"] == 0 && $_COOKIE["win"] != 1){
         echo '<br><br><img src= ' .$animes[$days]->image. ' class="aniimg" width="600" height="400" style="position: absolute; top: 125px; right: 650px;">';
         
 
-        echo '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-        <button onclick="toggleText()" id="Stupoo" style=""><img src='.asset("img/greenbox.jpg") . ' id="btn1" class="img-btn"></button>
+        echo '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <button onclick="toggleText()" style="padding:0; width:auto; height:auto"><img src='.asset("img/greenbox.jpg") . ' id="btn1" class="img-btn"></button>
         <h2 style="color: white; ">This is guess number: '. $guessnotwo. ' out of 6 </h2><br>
         <form method="post" autocomplete="off" action="'.route('anime.guess').'" style="">
             '.csrf_field().'
             <input type="text" id="search" name="guess"/>
-            <input type="hidden" name="animu"  value= "' .$animes[$days]->name. '">
             <input type="hidden" name="days" value= "' .$days. '">
             <input type="submit" name="SubmitButton"/>
         </form>
-        <br>
-        
+        <h3> Previous guesses</h3>
         </div>
         
 
@@ -161,8 +171,9 @@ if($_COOKIE["fail"] == 0 && $_COOKIE["win"] != 1){
         $guessnotwo = $_COOKIE["guessno"] + 1;
         echo '<div style="  margin: auto; width: 50%; text-align: center;">
         <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-        <button onclick="toggleText()" ><img src='.asset("img/box.jpg") . ' id="btn1" class="img-btn"></button>
-        <button onclick="toggle2()" ><img src='.asset("img/greenbox.jpg") . ' id="btn2" class="img-btn"></button>
+        <img src= '.$animes[$days]->image2.' id="imageBox" style="padding:0; width:600; height:400">
+        <button onclick="toggleText()" style="padding:0; width:auto; height:auto" ><img src='.asset("img/box.jpg") . ' id="btn1" class="img-btn"></button>
+        <button onclick="toggle2()" style="padding:0; width:auto; height:auto" ><img src='.asset("img/greenbox.jpg") . ' id="btn2" class="img-btn"></button>
 
         <h2 style="color: white;">This is guess number: '. $guessnotwo. ' out of 6 </h2><br>' ;
         echo '
@@ -171,26 +182,27 @@ if($_COOKIE["fail"] == 0 && $_COOKIE["win"] != 1){
         <form method="post" autocomplete="off" class = "autocomplete" action="'.route('anime.guess').'" style="">
             '.csrf_field().'
             <input type="text" id="search" name="guess"/>
-            <input type="hidden" name="animu" value= "' .$animes[$days]->name. '">
             <input type="hidden" name="days" value= "' .$days. '">
             <input onClick="onClick()" type="submit" name="SubmitButton"/>
         </form>
         <br>
     
 
-        </div>
     
 
         ';
+        echo "<h3> Previous guesses</h3> ";
+        echo $_COOKIE["guesslist"];
+        echo '</div>';
     }
     
     if($_COOKIE["guessno"] == 2){
         $guessnotwo = $_COOKIE["guessno"] + 1;
         echo '<div style="  margin: auto; width: 50%; text-align: center;">
         <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-        <button onclick="toggleText()" id="Stupoo" style=""><img src='.asset("img/box.jpg") . ' id="btn1" class="img-btn"></button>
-        <button onclick="toggle2()" style=""><img src='.asset("img/box.jpg") . ' id="btn2" class="img-btn"></button>
-        <button onclick="toggle3()" style=""><img src='.asset("img/greenbox.jpg") . ' id="btn3" class="img-btn"></button>';
+        <button onclick="toggleText()"style="padding:0; width:auto; height:auto"><img src='.asset("img/box.jpg") . ' id="btn1" class="img-btn"></button>
+        <button onclick="toggle2()" style="padding:0; width:auto; height:auto"><img src='.asset("img/box.jpg") . ' id="btn2" class="img-btn"></button>
+        <button onclick="toggle3()" style="padding:0; width:auto; height:auto"><img src='.asset("img/greenbox.jpg") . ' id="btn3" class="img-btn"></button>';
         echo '<h2 style="color: white;">This is guess number: '. $guessnotwo. ' out of 6 </h2><br>' ;
         echo '
         <img src= ' .$animes[$days]->image. ' id="Myid6" class="aniimg" width="600" height="400" style="position: absolute; top: 125px; right: 650px;">
@@ -199,27 +211,28 @@ if($_COOKIE["fail"] == 0 && $_COOKIE["win"] != 1){
         <form method="post" autocomplete="off" class = "autocomplete" action="'.route('anime.guess').'" style="">
             '.csrf_field().'
             <input type="text" id="search" name="guess"/>
-            <input type="hidden" name="animu" value= "' .$animes[$days]->name. '">
             <input type="hidden" name="days" value= "' .$days. '">
             <input onClick="onClick()" type="submit" name="SubmitButton"/>
         </form>
     
-        </div>
 
 
         
 
         ';
+        echo "<h3> Previous guesses</h3> ";
+        echo $_COOKIE["guesslist"];
+        echo '</div>';
     }
     
     if($_COOKIE["guessno"] == 3){
         $guessnotwo = $_COOKIE["guessno"] + 1;
         echo '<div style="  margin: auto; width: 50%; text-align: center;">
         <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-        <button onclick="toggleText()" id="Stupoo" style=""><img src='.asset("img/box.jpg") . ' id="btn1" class="img-btn"></button>
-        <button onclick="toggle3()" style=""><img src='.asset("img/box.jpg") . ' id="btn2" class="img-btn"></button>
-        <button onclick="toggle3()" style=""><img src='.asset("img/box.jpg") . ' id="btn3" class="img-btn"></button>
-        <button onclick="toggle4()" style=""><img src='.asset("img/greenbox.jpg") . ' id="btn4" class="img-btn"></button>';
+        <button onclick="toggleText()" style="padding:0; width:auto; height:auto"><img src='.asset("img/box.jpg") . ' id="btn1" class="img-btn"></button>
+        <button onclick="toggle3()" style="padding:0; width:auto; height:auto"><img src='.asset("img/box.jpg") . ' id="btn2" class="img-btn"></button>
+        <button onclick="toggle3()" style="padding:0; width:auto; height:auto"><img src='.asset("img/box.jpg") . ' id="btn3" class="img-btn"></button>
+        <button onclick="toggle4()" style="padding:0; width:auto; height:auto"><img src='.asset("img/greenbox.jpg") . ' id="btn4" class="img-btn"></button>';
         echo '<h2 style="color: white;">This is guess number: '. $guessnotwo. ' out of 6 </h2><br>' ;
         echo '
         <img src= ' .$animes[$days]->image. ' id="Myid6" class="aniimg" width="600" height="400" style="position: absolute; top: 125px; right: 650px;">
@@ -229,25 +242,26 @@ if($_COOKIE["fail"] == 0 && $_COOKIE["win"] != 1){
         <form method="post" autocomplete="off"  class = "autocomplete" action="'.route('anime.guess').'" style="">
             '.csrf_field().'
             <input type="text" id="search" name="guess"/>
-            <input type="hidden" name="animu" value= "' .$animes[$days]->name. '">
             <input type="hidden" name="days" value= "' .$days. '">
             <input onClick="onClick()" type="submit" name="SubmitButton"/>
         </form>
     
-        </div>
         
 
         ';
+        echo "<h3> Previous guesses</h3> ";
+        echo $_COOKIE["guesslist"];
+        echo '</div>';
     }
     if($_COOKIE["guessno"] == 4){
       $guessnotwo = $_COOKIE["guessno"] + 1;
       echo '<div style="  margin: auto; width: 50%; text-align: center;">
       <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-      <button onclick="toggleText()" id="Stupoo" style=""><img src='.asset("img/box.jpg") . ' id="btn1" class="img-btn"></button>
-      <button onclick="toggle2()" style=""><img src='.asset("img/box.jpg") . ' id="btn2" class="img-btn"></button>
-      <button onclick="toggle3()" style=""><img src='.asset("img/box.jpg") . ' id="btn3" class="img-btn"></button>
-      <button onclick="toggle4()" style=""><img src='.asset("img/box.jpg") . ' id="btn4" class="img-btn"></button>
-      <button onclick="toggle5()" style=""><img src='.asset("img/greenbox.jpg") . ' id="btn5" class="img-btn"></button>';
+      <button onclick="toggleText()" id="Stupoo" style="padding:0; width:auto; height:auto"><img src='.asset("img/box.jpg") . ' id="btn1" class="img-btn"></button>
+      <button onclick="toggle2()" style="padding:0; width:auto; height:auto"><img src='.asset("img/box.jpg") . ' id="btn2" class="img-btn"></button>
+      <button onclick="toggle3()" style="padding:0; width:auto; height:auto"><img src='.asset("img/box.jpg") . ' id="btn3" class="img-btn"></button>
+      <button onclick="toggle4()" style="padding:0; width:auto; height:auto"><img src='.asset("img/box.jpg") . ' id="btn4" class="img-btn"></button>
+      <button onclick="toggle5()" style="padding:0; width:auto; height:auto"><img src='.asset("img/greenbox.jpg") . ' id="btn5" class="img-btn"></button>';
       echo '<h2 style="color: white;">This is guess number: '. $guessnotwo. ' out of 6 </h2><br>' ;
       echo '
       <img src= ' .$animes[$days]->image. ' id="Myid6" class="aniimg" width="600" height="400" style="position: absolute; top: 125px; right: 650px;">
@@ -258,26 +272,27 @@ if($_COOKIE["fail"] == 0 && $_COOKIE["win"] != 1){
       <form method="post" autocomplete="off"  class = "autocomplete" action="'.route('anime.guess').'" style="">
           '.csrf_field().'
           <input type="text" id="search" name="guess"/>
-          <input type="hidden" name="animu" value= "' .$animes[$days]->name. '">
           <input type="hidden" name="days" value= "' .$days. '">
           <input onClick="onClick()" type="submit" name="SubmitButton"/>
       </form>
-      </div>
 
       
 
       ';
+      echo "<h3> Previous guesses</h3> ";
+      echo $_COOKIE["guesslist"];
+      echo '</div>';
   }
   if($_COOKIE["guessno"] == 5){
     $guessnotwo = $_COOKIE["guessno"] + 1;
     echo '<div style="  margin: auto; width: 50%; text-align: center;">
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <button onclick="toggleText()" id="Stupoo" style=""><img src='.asset("img/box.jpg") . ' id="btn1" class="img-btn"></button>
-    <button onclick="toggle2()" style=""><img src='.asset("img/box.jpg") . ' id="btn2" class="img-btn"></button>
-    <button onclick="toggle3()" style=""><img src='.asset("img/box.jpg") . ' id="btn3" class="img-btn"></button>
-    <button onclick="toggle4()" style=""><img src='.asset("img/box.jpg") . ' id="btn4" class="img-btn"></button>
-    <button onclick="toggle5()" style=""><img src='.asset("img/box.jpg") . ' id="btn5" class="img-btn"></button>
-    <button onclick="toggle6()" style=""><img src='.asset("img/greenbox.jpg") . ' id="btn6" class="img-btn"></button>';
+    <button onclick="toggleText()" id="Stupoo" style="padding:0; width:auto; height:auto"><img src='.asset("img/box.jpg") . ' id="btn1" class="img-btn"></button>
+    <button onclick="toggle2()" style="padding:0; width:auto; height:auto"><img src='.asset("img/box.jpg") . ' id="btn2" class="img-btn"></button>
+    <button onclick="toggle3()" style="padding:0; width:auto; height:auto"><img src='.asset("img/box.jpg") . ' id="btn3" class="img-btn"></button>
+    <button onclick="toggle4()" style="padding:0; width:auto; height:auto"><img src='.asset("img/box.jpg") . ' id="btn4" class="img-btn"></button>
+    <button onclick="toggle5()" style="padding:0; width:auto; height:auto"><img src='.asset("img/box.jpg") . ' id="btn5" class="img-btn"></button>
+    <button onclick="toggle6()" style="padding:0; width:auto; height:auto"><img src='.asset("img/greenbox.jpg") . ' id="btn6" class="img-btn"></button>';
     echo '<h2 style="color: white;">This is guess number: '. $guessnotwo. ' out of 6 </h2><br>' ;
     echo '
     <img src= ' .$animes[$days]->image. ' id="Myid6" class="aniimg" width="600" height="400" style="position: absolute; top: 125px; right: 650px;">
@@ -289,40 +304,43 @@ if($_COOKIE["fail"] == 0 && $_COOKIE["win"] != 1){
     <form method="post" autocomplete="off"  class = "autocomplete" action="'.route('anime.guess').'" style="">
         '.csrf_field().'
         <input type="text" id="search" name="guess"/>
-        <input type="hidden" name="animu" class="typeahead form-control" value= "' .$animes[$days]->name. '">
         <input type="hidden" name="days" value= "' .$days. '">
         <input onClick="onClick()" type="submit" name="SubmitButton"/>
     </form>
-    </div>
 
     
 
     ';
+    echo "<h3> Previous guesses</h3> ";
+    echo $_COOKIE["guesslist"];
+    echo '</div>';
 }
 
 
-}if ($_COOKIE["fail"] == 1 || $_COOKIE["guessno"] > 5 ){
+}if ($_COOKIE["fail"] === 1 || $_COOKIE["guessno"] > 5 ){
   echo '<div style="  margin: auto; width: 50%; text-align: center;">
-  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-  <button onclick="toggleText()" id="Stupoo" style=""><img src='.asset("img/box.jpg") . ' id="btn1" class="img-btn"></button>
-  <button onclick="toggle2()" style=""><img src='.asset("img/box.jpg") . ' id="btn2" class="img-btn"></button>
-  <button onclick="toggle3()" style=""><img src='.asset("img/box.jpg") . ' id="btn3" class="img-btn"></button>
-  <button onclick="toggle4()" style=""><img src='.asset("img/box.jpg") . ' id="btn4" class="img-btn"></button>
-  <button onclick="toggle5()" style=""><img src='.asset("img/box.jpg") . ' id="btn5" class="img-btn"></button>
-  <button onclick="toggle6()" style=""><img src='.asset("img/greenbox.jpg") . ' id="btn6" class="img-btn"></button>';
+  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+  <button onclick="toggleText()" id="Stupoo" style="padding:0; width:auto; height:auto"><img src='.asset("img/box.jpg") . ' id="btn1" class="img-btn"></button>
+  <button onclick="toggle2()" style="padding:0; width:auto; height:auto"><img src='.asset("img/box.jpg") . ' id="btn2" class="img-btn"></button>
+  <button onclick="toggle3()" style="padding:0; width:auto; height:auto"><img src='.asset("img/box.jpg") . ' id="btn3" class="img-btn"></button>
+  <button onclick="toggle4()" style="padding:0; width:auto; height:auto"><img src='.asset("img/box.jpg") . ' id="btn4" class="img-btn"></button>
+  <button onclick="toggle5()" style="padding:0; width:auto; height:auto"><img src='.asset("img/box.jpg") . ' id="btn5" class="img-btn"></button>
+  <button onclick="toggle6()" style="padding:0; width:auto; height:auto"><img src='.asset("img/greenbox.jpg") . ' id="btn6" class="img-btn"></button>';
 
     echo '<p style="color:white;">Sorry you lost! the answer was: '. $animes[$days]->name. '</p>';
-    echo '<br><br><img src= ' .$animes[$days]->image. ' id="Myid6" width="600" height="400" style="position: absolute; top: 125px; right: 650px;">
+    echo '<img src= ' .$animes[$days]->image. ' id="Myid6" width="600" height="400" style="position: absolute; top: 125px; right: 650px;">
     <img src= ' .$animes[$days]->image2. ' id="Myid" class="aniimg" width="600" height="400" style="position: absolute; top: 125px; right: 650px;">
     <img src= ' .$animes[$days]->image3. ' id="Myid2" class="aniimg" width="600" height="400" style="position: absolute; top: 125px; right: 650px;">
     <img src= ' .$animes[$days]->image4. ' id="Myid3" class="aniimg" width="600" height="400" style="position: absolute; top: 125px; right: 650px;">
     <img src= ' .$animes[$days]->image5. ' id="Myid4" class="aniimg" width="600" height="400" style="position: absolute; top: 125px; right: 650px;">
     <img src= ' .$animes[$days]->image6. ' id="Myid5" class="aniimg" width="600" height="400" style="position: absolute; top: 125px; right: 650px;"> 
 
-    </div>
 
 
     ';
+    echo "<h3> Previous guesses</h3> ";
+    echo $_COOKIE["guesslist"];
+    echo '</div>';
 }
 
 ?>
@@ -368,6 +386,22 @@ if($_COOKIE["fail"] == 0 && $_COOKIE["win"] != 1){
 
 
 
+<script>
+  const gl = document.getElementsByClassName('guesslisto');
+    for (var i = 0; i < gl.length; i++) {
+      gl[i].style.color = "white";
+    }
+  
+  <?php echo 'if ('.$_COOKIE["win"].' == 1){
+    const guesslist = document.getElementsByClassName("guesslisto");
+    guesslist[guesslist.length - 1].style.color = "#FFA500";
+
+  }';?>
+
+
+
+</script>
+
 
 
 <script type="text/javascript">
@@ -384,6 +418,8 @@ if($_COOKIE["fail"] == 0 && $_COOKIE["win"] != 1){
       const Images = images[i].style.display = "none";
     }
     document.getElementById("Myid6").style.display = "block";
+    var myvar = <?php echo json_encode($animes[$days]->image); ?>;
+    document.getElementById('imageBox').src = myvar;
 
   
   }
@@ -399,6 +435,8 @@ if($_COOKIE["fail"] == 0 && $_COOKIE["win"] != 1){
       const Images = images[i].style.display = "none";
     }
     document.getElementById("Myid").style.display = "block";
+    var myvar = <?php echo json_encode($animes[$days]->image2); ?>;
+    document.getElementById('imageBox').src = myvar;
  
   
   }
@@ -414,6 +452,8 @@ if($_COOKIE["fail"] == 0 && $_COOKIE["win"] != 1){
       const Images = images[i].style.display = "none";
     }
     document.getElementById("Myid2").style.display = "block";
+    var myvar = <?php echo json_encode($animes[$days]->image3); ?>;
+    document.getElementById('imageBox').src = myvar;
 
   
   }
@@ -429,6 +469,8 @@ if($_COOKIE["fail"] == 0 && $_COOKIE["win"] != 1){
       const Images = images[i].style.display = "none";
     }
     document.getElementById("Myid3").style.display = "block";
+    var myvar = <?php echo json_encode($animes[$days]->image4); ?>;
+    document.getElementById('imageBox').src = myvar;
   
   }
   function toggle5(){
@@ -442,6 +484,8 @@ if($_COOKIE["fail"] == 0 && $_COOKIE["win"] != 1){
       const Images = images[i].style.display = "none";
     }
     document.getElementById("Myid4").style.display = "block";
+    var myvar = <?php echo json_encode($animes[$days]->image5); ?>;
+    document.getElementById('imageBox').src = myvar;
   
   }
   function toggle6(){
@@ -455,6 +499,8 @@ if($_COOKIE["fail"] == 0 && $_COOKIE["win"] != 1){
       const Images = images[i].style.display = "none";
     }
     document.getElementById("Myid5").style.display = "block";
+    var myvar = <?php echo json_encode($animes[$days]->image6); ?>;
+    document.getElementById('imageBox').src = myvar;
 
   
   }
