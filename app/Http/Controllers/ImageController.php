@@ -42,7 +42,7 @@ class ImageController extends Controller
     public function viewImage(){
         $startday = new DateTime('2022-06-08');
         $today = new DateTime();
-        $days  = $today->diff($startday)->format('%a')+4;
+        $days  = $today->diff($startday)->format('%a')+2;
 
 
         $sql = "select * from postanime";
@@ -89,7 +89,7 @@ class ImageController extends Controller
 
         $startday = new DateTime('2022-06-08');
         $today = new DateTime();
-        $days  = $today->diff($startday)->format('%a')+4;
+        $days  = $today->diff($startday)->format('%a')+2;
 
 
         $sql = "select * from postanime";
