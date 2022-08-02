@@ -544,6 +544,21 @@ if($_COOKIE["fail"] == 0 && $_COOKIE["win"] != 1){
 
 </script>
 
+<style>
+   .img-btn{
+    background: none;
+    border: 0;
+    display: fixed;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    color: var(--color-fg);
+    margin: 0px;
+    padding: 0px;
+    }
+
+</style>
 
 
 @stop
