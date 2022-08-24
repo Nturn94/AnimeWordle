@@ -4,27 +4,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ImageController;
 use App\Models\Anime;
 
+Route::get('/',[ImageController::class,'gameView'])->name('game.view');
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-//For showing an image
-Route::get('/',[ImageController::class,'viewImage'])->name('images.view');
-
-Route::get('/autocomplete',[ImageController::class,'Autocomplete'])->name('autocomplete');
+Route::get('/autocomplete',[ImageController::class,'Autocomplete'])->name('game.autocomplete');
 
 Route::get('/scrape',[ImageController::class,'Scrape'])->name('scrape.view');
 
-Route::post('/store-comment',[ImageController::class,'Postanimezz'])->name('anime.store');
+Route::post('/store-comment',[ImageController::class,'Postanime'])->name('scrape.create');
 
-Route::post('/guess-answer',[ImageController::class,'Guess'])->name('anime.guess');
+Route::post('/guess-answer',[ImageController::class,'Guess'])->name('game.guess');
 
 // URL::forceScheme('https');
