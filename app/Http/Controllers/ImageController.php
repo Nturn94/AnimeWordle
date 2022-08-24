@@ -6,8 +6,8 @@ namespace App\Http\Controllers;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Anime;
 use Illuminate\Support\Facades\DB;
-use GuzzleHttp\Client;
 use DateTime;
+use Session;
 
 
 
@@ -47,7 +47,7 @@ class ImageController extends Controller
 
         $sql = "select * from postanime";
         $animes = DB::select($sql); 
-        // $jj = $animes[0];
+
         return view('Image.view_image')->with("animes", $animes)->with("days", $days);
     }
 
@@ -65,22 +65,43 @@ class ImageController extends Controller
         $fail = 0;
         $days = $request->days;
 
+
+
+        // increment session variable.
+        // if (!isset($_SESSION['dayno']) || $_SESSION['dayno'] == ''){
+        //     session(['dayno' => $days]);
+        //     session(['guessno' => $guessno]);
+        //     session(['win' => $win]);
+        //     session(['fail' => $fail]);
+        //     session(['guesslist' => '']);
+
+        // }
+        // if($_SESSION["dayno"] != $days) {
+        //     session(['dayno' => $days]);
+        //     session(['guessno' => $guessno]);
+        //     session(['win' => $win]);
+        //     session(['fail' => $fail]);
+        //     session(['guesslist' => '']);
+
+        // }
         
-        if(!isset($_COOKIE["dayno"])) {
-            setcookie("dayno", $days,  "/");
-            setcookie("guessno", $guessno,  "/");
-            setcookie("consec", $consec,  "/");
-            setcookie("win", $win,  "/");
-            setcookie("fail", $fail,  "/");
-            setcookie("guesslist", "",  "/");
-        }
-        if($_COOKIE["dayno"] != $days) {
-            setcookie("dayno", $days,  "/");
-            setcookie("guessno", $guessno,  "/");
-            setcookie("win", $win,  "/");
-            setcookie("fail", $fail,  "/");
-            setcookie("guesslist", "",  "/");
-        }
+
+        
+        // if(!isset($_COOKIE["dayno"])) {
+        //     setcookie("dayno", $days,  "/");
+        //     setcookie("guessno", $guessno,  "/");
+        //     setcookie("consec", $consec,  "/");
+        //     setcookie("win", $win,  "/");
+        //     setcookie("fail", $fail,  "/");
+        //     setcookie("guesslist", "",  "/");
+        // }
+        // if($_COOKIE["dayno"] != $days) {
+        //     setcookie("dayno", $days,  "/");
+        //     setcookie("guessno", $guessno,  "/");
+        //     setcookie("win", $win,  "/");
+        //     setcookie("fail", $fail,  "/");
+        //     setcookie("guesslist", "",  "/");
+        // }
         $input = $request->guess;
         if (empty($input)){
             $input = "-";
@@ -91,7 +112,6 @@ class ImageController extends Controller
         $today = new DateTime();
         $days  = $today->diff($startday)->format('%a')+2;
 
-
         $sql = "select * from postanime";
         $animes = DB::select($sql); 
 
@@ -99,9 +119,11 @@ class ImageController extends Controller
         $id = ($animes[$days])->name;
         $answer = strtolower($id);
         $input = strtolower($input);
-        // $answer = strtolower($_POST['animu']);
         $guessno = $_COOKIE["guessno"] + 1;
 
+        Session::put('guessno', $guessno);
+
+    //    $_SESSION['guessno'] = $guessno;
         setcookie("guessno", $guessno, "/");
     
         if($input == $answer){
@@ -109,6 +131,7 @@ class ImageController extends Controller
             setcookie("consec", $consec,  "/");
             $win = 1;
             setcookie("win", $win, "/");
+            $_SESSION['win'] = 1;
 
     
         }
@@ -117,6 +140,7 @@ class ImageController extends Controller
             setcookie("consec", $consec,  "/");
             $fail = 1;
             setcookie("fail", $fail, "/");
+            $_SESSION['fail'] = 1;
         }
         if($input != $answer){
             $input .= "&#10060; ";
@@ -138,23 +162,15 @@ class ImageController extends Controller
     }
 
     public function Postanimezz(Request $request){
-        // dd("hello");
-        // $array = unserialize($_POST['result']);
         $array = unserialize($_POST['result']);
-        // dd($array);
         for($ii = 1; $ii<10; $ii++){
+
+
             
             $temp = $array[$ii][0];
-            $query = "select * from postanime where name = \"". $temp. "\"";
-            $tempa = DB::select($query);
-            // dd($tempa);
-            if(!$tempa){
+            $data = Anime::select("name")->where('name', $temp)->get();
 
-                // $anime = DB::table('postanime')->insertGetId(array(
-                //     'id' => 
-                //     'name'      => $array[$ii][0],
-                //     'image'     => $array[$ii][1],
-                //     'image2'      => $array[$ii][2]));
+            if(!$data){
 
                 if($array[$ii][0]){
                     $anime = new Anime();
@@ -175,25 +191,5 @@ class ImageController extends Controller
 
         }
         return view('Image.view_scrape');
-        // return redirect('/');
     }
-}
-
-function data_stringify($data) {
-  switch (gettype($data)) {
-    case 'string' : return '\''.addcslashes($data, "'\\").'\'';
-    case 'boolean': return $data ? 'true' : 'false';
-    case 'NULL'   : return 'null';
-    case 'object' :
-    case 'array'  :
-      $expressions = [];
-      foreach ($data as $c_key => $c_value) {
-        $expressions[] = data_stringify($c_key).' => '.
-                         data_stringify($c_value);
-      }
-      return gettype($data) === 'object' ?
-        '(object)['.implode(', ', $expressions).']' :
-                '['.implode(', ', $expressions).']';
-    default: return (string)$data;
-  }
 }

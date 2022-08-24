@@ -6,7 +6,7 @@
 // ini_set('display_errors', 1);
 // error_reporting(E_ALL);
         use GuzzleHttp\Exception\ClientException;
-        require 'C:\wamp64\www\blank\vendor\autoload.php';
+        require 'C:\wamp64\www\scraper\vendor\autoload.php';
 
         $client = new GuzzleHttp\Client([
             'base_uri' => 'http://127.0.0.1:8001/'
@@ -119,9 +119,12 @@
             $abcde = "";
             $abcde = $l;
             // dd($abcde);
-                
+            // dd($l);
+
+            debug_to_console($l);
             $a = new SimpleXMLElement($l);
-            $b =  $a['href'];
+            $b =  $a["href"];
+            debug_to_console($b);
             // echo $b;
             $xxxx = "https://fancaps.net/$b";
             // dd("$xxxx");
@@ -188,6 +191,16 @@
 
 
     
+?>
+
+<?php
+function debug_to_console($data) {
+    $output = $data;
+    if (is_array($output))
+        $output = implode(',', $output);
+
+    echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
+}
 ?>
 
 
