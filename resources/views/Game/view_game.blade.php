@@ -74,6 +74,9 @@ $value = $_COOKIE['guessno'];
 $values = (int)$value + 1;
 ?>
 <img src= '' id="imageBox" style="padding:0; width:600; height:400"><br><br>
+@if ($_COOKIE["win"] > 0 OR $_COOKIE["fail"] > 0)
+<?php $values = 6;?>
+@endif
 @for ($i = 0; $i < $values; $i++)
  @if ($i < 6)
     <button onclick="toggle{{$i+1}}()" style="padding:0; width:auto; height:auto" ><img src='{{asset("img/box.jpg")}}' id="btn{{$i+1}}" class="img-btn"></button>
@@ -111,6 +114,7 @@ var valuestojs = <?php echo $values;?>;
     }
     buttons[buttons.length-1].src = "{{asset('img/greenbox.jpg')}}";
 </script>
+<?php $values = $_COOKIE['guessno']; ?>
 @if ($_COOKIE["win"] > 0)
   @if ($values == 1)
     <h1 style="color:white; ">You win in {{$_COOKIE["guessno"]}} guess! </h1>
