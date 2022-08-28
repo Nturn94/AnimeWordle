@@ -43,31 +43,12 @@ $win = 0;
 $fail = 0;
 $days = $days;
 $currentimg = $animes[$days]->image;
-// This code can be used to clear cookies
-// setcookie("dayno", 0, "/");
-// setcookie("guessno", 0, "/");
-// setcookie("consec", 0, "/");
-// setcookie("win", 0, "/");
-// setcookie("fail", 0, "/");
-// setcookie("guesslist", "", "/");
-if(!isset($_COOKIE["dayno"])) {
-    setcookie("dayno", $days,  "/");
-    setcookie("guessno", 0,  "/");
-    setcookie("consec", 0,  "/");
-    setcookie("win", 0,   "/");
-    setcookie("fail", 0,  "/");
-    setcookie("guesslist", "",  "/");
-    header('Refresh: 0');
-}
-if($_COOKIE["dayno"] != $days) {
-    setcookie("dayno", $days,  "/");
-    setcookie("guessno", 0,  "/");
-    setcookie("win", 0,  "/");
-    setcookie("fail", 0,  "/");
-    setcookie("guesslist", "",  "/");
-    header('Refresh: 0');
-}
-?>
+
+
+
+  ?>
+
+
 <div style="  margin: auto; width: 50%; text-align: center;">
 <?php
 $value = $_COOKIE['guessno'];

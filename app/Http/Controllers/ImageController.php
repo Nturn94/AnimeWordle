@@ -28,9 +28,40 @@ class ImageController extends Controller
         return response()->json($data);
     }
     public function gameView(){
+
         $startday = new DateTime('2022-06-08');
         $today = new DateTime();
         $days  = $today->diff($startday)->format('%a')+2;
+        if(!isset($_COOKIE["dayno"])) {
+            setcookie("dayno", $days,  "/");
+            setcookie("guessno", 0,  "/");
+            setcookie("consec", 0,  "/");
+            setcookie("win", 0,   "/");
+            setcookie("fail", 0,  "/");
+            setcookie("guesslist", "",  "/");
+            $_COOKIE["dayno"] = $days;
+            $_COOKIE["guessno"] = 0;
+            $_COOKIE["consec"] = 0;
+            $_COOKIE["win"] = 0;
+            $_COOKIE["fail"] = 0;
+            $_COOKIE["guesslist"] = "";
+        }
+        if(isset($_COOKIE["dayno"])){
+          $dayno =  ($_COOKIE["dayno"]);
+            if($dayno != $days) {
+            setcookie("dayno", $days,  "/");
+            setcookie("guessno", 0,  "/");
+            setcookie("win", 0,  "/");
+            setcookie("fail", 0,  "/");
+            setcookie("guesslist", "",  "/");
+            $_COOKIE["dayno"] = $days;
+            $_COOKIE["guessno"] = 0;
+            $_COOKIE["win"] = 0;
+            $_COOKIE["fail"] = 0;
+            $_COOKIE["guesslist"] = "";
+        }
+        }
+
         $sql = "select * from postanime";
         $animes = DB::select($sql); 
         return view('Game.view_game')->with("animes", $animes)->with("days", $days);
