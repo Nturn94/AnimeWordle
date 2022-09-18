@@ -6,6 +6,8 @@ use App\Models\Anime;
 use Illuminate\Support\Facades\DB;
 use DateTime;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Session;
 
 class ImageController extends Controller
 {
@@ -28,97 +30,68 @@ class ImageController extends Controller
         return response()->json($data);
     }
     public function gameView(){
+        session_start();
+        // Calculate the current day number (based off the fixed starting date)
+        $dayNumber = Carbon::now()->diff('2022-09-18')->days;
 
-        $startday = new DateTime('2022-06-08');
-        $today = new DateTime();
-        $days  = $today->diff($startday)->format('%a')+2;
-        if(!isset($_COOKIE["dayno"])) {
-            setcookie("dayno", $days,  "/");
-            setcookie("guessno", 0,  "/");
-            setcookie("consec", 0,  "/");
-            setcookie("win", 0,   "/");
-            setcookie("fail", 0,  "/");
-            setcookie("guesslist", "",  "/");
-            $_COOKIE["dayno"] = $days;
-            $_COOKIE["guessno"] = 0;
+        // Since each day has it's own puzzle we can easily find today's puzzle by it's (day) ID
+        $anime = Anime::firstOrFail($dayNumber);
+        // Session::put('guesses', []);
+        // Session::put('anime_id', 90);
+        if (!isset($_SESSION['anime_id'])){
+            $_SESSION['anime_id'] = $anime->value("id");
+        }elseif( $_SESSION['anime_id'] !=  $anime->value("id")){
+            $_SESSION['anime_id'] = $anime->value("id");
+            $_SESSION['guesses'] = [];
+            
+        }
+        $list = array();
+        $animelist = Anime::all();
+        foreach ($animelist as $name){
+            array_push($list, $name->name);
+        }
+        $maxGuesses = 6;
+        $guesses = $_SESSION['guesses'];
+        if (
+            in_array($anime->name, $guesses)
+            && count($guesses) <= $maxGuesses
+        ) {
+            if(!isset($_COOKIE["consec"])){
+                $_COOKIE["consec"] = 1;
+            }else{
+                $_COOKIE["consec"]+=1;
+            }
+            $consec = $_COOKIE["consec"];
+            return view('Game.game_win', [
+                'anime' => $anime,
+                'consec' => $_COOKIE["consec"],
+            ]);
+        } elseif (count($guesses) >= $maxGuesses) {
             $_COOKIE["consec"] = 0;
-            $_COOKIE["win"] = 0;
-            $_COOKIE["fail"] = 0;
-            $_COOKIE["guesslist"] = "";
-        }
-        if(isset($_COOKIE["dayno"])){
-          $dayno =  ($_COOKIE["dayno"]);
-            if($dayno != $days) {
-            setcookie("dayno", $days,  "/");
-            setcookie("guessno", 0,  "/");
-            setcookie("win", 0,  "/");
-            setcookie("fail", 0,  "/");
-            setcookie("guesslist", "",  "/");
-            $_COOKIE["dayno"] = $days;
-            $_COOKIE["guessno"] = 0;
-            $_COOKIE["win"] = 0;
-            $_COOKIE["fail"] = 0;
-            $_COOKIE["guesslist"] = "";
-        }
+            return view('Game.game_fail', [
+                'anime' => $anime,
+            ]);
         }
 
-        $sql = "select * from postanime";
-        $animes = DB::select($sql); 
-        return view('Game.view_game')->with("animes", $animes)->with("days", $days);
+        return view('Game.view_game', [
+            'anime' => $anime,
+            'guesses' => $guesses,
+            'list' => $list,
+        ]);
     }
     public function Scrape(){
         return view('Game.view_scrape');
     }
     public function Guess(Request $request){
         // An empty guess will be replaced with a "-"
+        session_start();
         $input = $request->guess;
         if (empty($input)){
             $input = "-";
         }
-        //This segment of code does a DB query to return the answer (Name of anime)
-        $startday = new DateTime('2022-06-08');
-        $today = new DateTime();
-        $days  = $today->diff($startday)->format('%a')+2;
-        $sql = "select * from postanime";
-        $animes = DB::select($sql); 
-        $id = ($animes[$days])->name;
-        //Removing case sensitive answers
-        $answer = strtolower($id);
-        $input = strtolower($input);
-        // Adding to the guess counter
-        $guessno = $_COOKIE["guessno"] + 1;
-        setcookie("guessno", $guessno, "/");
-        // If correct, adds to streak and sets win flag
-        if($input == $answer){
-            $consec = $_COOKIE["consec"] + 1;
-            setcookie("consec", $consec,  "/");
-            $win = 1;
-            setcookie("win", $win, "/");
-        }
-        //If guess number exceeds 6 (5) reset steak, and set fail flag
-        $lose_checker = $_COOKIE["guessno"];
-        if($lose_checker >5){
-            $consec = 0;
-            setcookie("consec", $consec,  "/");
-            $fail = 1;
-            setcookie("fail", $fail, "/");
-        }
-        // This code adds an emoji (cross) to an incorrect answer.
-        if($input != $answer){
-            $input .= "&#10060; ";
-        }
-        // I have a cookie called, "guesslist", which stores all previous answers. I add HTML tags to words within this cookie. Like new lines and classes.
-        $add_tags_to_answer = "<p class='guesslisto'>" . $input . "</p>";
-        if (isset($_COOKIE["guesslist"])){
-            $guesslist = $_COOKIE["guesslist"];
-            $guesslist .= " ";
-            $guesslist .= $add_tags_to_answer;
-            setcookie("guesslist", $guesslist,  "/");
-        }elseif (empty($_COOKIE["guesslist"])){
-            setcookie("guesslist", $add_tags_to_answer,  "/");
-        }
+        array_push($_SESSION['guesses'], $input);
         return redirect('/');
-    }
+}
 
     //This function checks if entry exists and if it doesn't, it adds a new entry.
     public function Postanime(Request $request){
