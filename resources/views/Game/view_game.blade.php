@@ -6,9 +6,10 @@
 if($guesses == []){
   $value = 1;
 }else{
-  $value = count($guesses);
+  $value = count($guesses)+1;
 }
 $values = (int)$value;
+// dd($anime->value("image6"));
 ?>
 <img src= '' id="imageBox" style="padding:0; width: 30%; height:350"><br><br>
 @for ($i = 0; $i < $values; $i++)
@@ -19,8 +20,9 @@ $values = (int)$value;
 <script>
 <?php 
 $tool = "image";
-$tool2 = $i+1;
+$tool2 = $i;
 $tool3 = $tool.=$tool2;
+
 
 ?>
 
@@ -41,7 +43,7 @@ $tool3 = $tool.=$tool2;
 if($guesses == []){
   $values = 1;
 }else{
-  $values = count($guesses);
+  $values = count($guesses)+1;
 }
 ?>
 

@@ -35,9 +35,9 @@ class ImageController extends Controller
         $dayNumber = Carbon::now()->diff('2022-09-18')->days;
 
         // Since each day has it's own puzzle we can easily find today's puzzle by it's (day) ID
-        $anime = Anime::firstOrFail($dayNumber);
-        // Session::put('guesses', []);
-        // Session::put('anime_id', 90);
+        $anime = Anime::where('id', $dayNumber);
+        // $_SESSION['guesses'] = [];
+        // $_SESSION['anime_id'] = 100;
         if (!isset($_SESSION['anime_id'])){
             $_SESSION['anime_id'] = $anime->value("id");
         }elseif( $_SESSION['anime_id'] !=  $anime->value("id")){
@@ -53,7 +53,7 @@ class ImageController extends Controller
         $maxGuesses = 6;
         $guesses = $_SESSION['guesses'];
         if (
-            in_array($anime->name, $guesses)
+            in_array($anime->value("name"), $guesses)
             && count($guesses) <= $maxGuesses
         ) {
             if(!isset($_COOKIE["consec"])){
