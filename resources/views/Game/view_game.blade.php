@@ -25,6 +25,7 @@
     buttons[buttons.length-1].src = "{{asset('img/greenbox.jpg')}}";
 </script>
 
+
 <h2 style="color: white;">This is guess number: {{count($guesses)+1}} out of 6 </h2><br>' ; 
 <form method="post" autocomplete="off" class = "autocomplete" action="{{route('game.guess')}}" style="">
   @csrf
@@ -58,8 +59,9 @@
   
 </script>
 
-@For($k = 1; $k < count($guesses)+1; $k++)
+@For($k = 1; $k < (count($guesses)+2); $k++)
   @if ($k < 7)
+  
     <script>
       function toggle{{$k}}(){
         const buttons = document.getElementsByClassName('img-btn');
