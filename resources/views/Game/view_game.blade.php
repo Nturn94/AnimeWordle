@@ -76,61 +76,25 @@ if($guesses == []){
                 });
             }
         });
-  function toggle1(){
-    const buttons = document.getElementsByClassName('img-btn');
-    for (var i = 0; i < buttons.length; i++) {
-      const buttonImage = buttons[i].src = '{{asset("img/box.jpg")}}';
-    }
-    document.getElementById("btn1").src = '{{asset("img/greenbox.jpg")}}'; 
-    var myvar = <?php echo json_encode($anime->value("image1")); ?>;
-    document.getElementById('imageBox').src = myvar;
-  }
-  function toggle2(){
-    const buttons = document.getElementsByClassName('img-btn');
-    for (var i = 0; i < buttons.length; i++) {
-      const buttonImage = buttons[i].src = '{{asset("img/box.jpg")}}';
-    }
-    document.getElementById("btn2").src = '{{asset("img/greenbox.jpg")}}'; 
-    var myvar = <?php echo json_encode($anime->value("image2")); ?>;
-    document.getElementById('imageBox').src = myvar;
-  }
-  function toggle3(){
-    const buttons = document.getElementsByClassName('img-btn');
-    for (var i = 0; i < buttons.length; i++) {
-      const buttonImage = buttons[i].src = "img/box.jpg";
-    }
-    document.getElementById("btn3").src = "img/greenbox.jpg"; 
-    var myvar = <?php echo json_encode($anime->value("image3")); ?>;
-    document.getElementById('imageBox').src = myvar;
-  }
-  function toggle4(){
-    const buttons = document.getElementsByClassName('img-btn');
-    for (var i = 0; i < buttons.length; i++) {
-      const buttonImage = buttons[i].src = "img/box.jpg";
-    }
-    document.getElementById("btn4").src = "img/greenbox.jpg"; 
-    var myvar = <?php echo json_encode($anime->value("image4")); ?>;
-    document.getElementById('imageBox').src = myvar;
-  }
-  function toggle5(){
-    const buttons = document.getElementsByClassName('img-btn');
-    for (var i = 0; i < buttons.length; i++) {
-      const buttonImage = buttons[i].src = "img/box.jpg";
-    }
-    document.getElementById("btn5").src = "img/greenbox.jpg"; 
-    var myvar = <?php echo json_encode($anime->value("image5")); ?>;
-    document.getElementById('imageBox').src = myvar;
-  }
-  function toggle6(){
-    const buttons = document.getElementsByClassName('img-btn');
-    for (var i = 0; i < buttons.length; i++) {
-      const buttonImage = buttons[i].src = "img/box.jpg";
-    }
-    document.getElementById("btn6").src = "img/greenbox.jpg"; 
-    var myvar = <?php echo json_encode($anime->value("image6")); ?>;
-    document.getElementById('imageBox').src = myvar;
-  }
+
+  
 </script>
 
+@For($k = 1; $k < $values+1; $k++)
+  @if ($k < 7)
+    <script>
+      function toggle{{$k}}(){
+        const buttons = document.getElementsByClassName('img-btn');
+        for (var i = 0; i < buttons.length; i++) {
+          const buttonImage = buttons[i].src = "img/box.jpg";
+        }
+        document.getElementById("btn{{$k}}").src = "img/greenbox.jpg"; 
+        var myvar = <?php echo json_encode($anime->value("image$k")); ?>;
+        document.getElementById('imageBox').src = myvar;
+
+      }
+    </script>
+  @endif 
+@endfor
 @stop
 
