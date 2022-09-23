@@ -47,6 +47,7 @@ class ImageController extends Controller
         }
         $list = array();
         $animelist = Anime::all();
+        // dd(count($animelist));
         foreach ($animelist as $name){
             array_push($list, $name->name);
         }
@@ -96,13 +97,16 @@ class ImageController extends Controller
     //This function checks if entry exists and if it doesn't, it adds a new entry.
     public function Postanime(Request $request){
         $array = unserialize($_POST['result']);
+        // dd($array);
         for($ii = 1; $ii<10; $ii++){
             $temp = $array[$ii][0];
             $data = Anime::select("name")->where('name', $temp)->get();
             if(!$data){
                 if($array[$ii][0]){
                     $anime = new Anime();
-                    $anime->name = strip_tags($array[$ii][0]);
+                    // $anime->name = strip_tags($array[$ii][0]);
+                    $parse = str_replace("'", " ", $array[$ii][0]);
+                    $anime->name = $parse;
                     $anime->image = $array[$ii][1];
                     $anime->image2 = $array[$ii][2];
                     $anime->image3 = $array[$ii][3];

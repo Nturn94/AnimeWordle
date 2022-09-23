@@ -69,7 +69,7 @@
           const buttonImage = buttons[i].src = "img/box.jpg";
         }
         document.getElementById("btn{{$k}}").src = "img/greenbox.jpg"; 
-        var myvar = <?php echo json_encode($anime->value("image$k")); ?>;
+        var myvar = "{{$anime->value("image$k")}}";
         document.getElementById('imageBox').src = myvar;
 
       }
