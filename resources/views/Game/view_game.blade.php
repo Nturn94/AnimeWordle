@@ -2,32 +2,17 @@
 @extends('master')  
 @section('content') 
 <div style="margin: auto; width: 100%; text-align: center;    height:90%;padding:10px;">
-<?php
-if($guesses == []){
-  $value = 1;
-}else{
-  $value = count($guesses)+1;
-}
-$values = (int)$value;
-// dd($anime->value("image6"));
-?>
+
 <img src= '' id="imageBox" style="padding:0; width: 30%; height:350"><br><br>
-@for ($i = 0; $i < $values; $i++)
+@for ($i = 0; $i < count($guesses)+1; $i++)
  @if ($i < 6)
     <button onclick="toggle{{$i+1}}()" style="padding:0; width:auto; height:auto" ><img src='{{asset("img/box.jpg")}}' id="btn{{$i+1}}" class="img-btn"></button>
   @endif
 @endfor
 <script>
-<?php 
-$tool = "image";
-$tool2 = $i;
-$tool3 = $tool.=$tool2;
-
-
-?>
 
   const updateImage = () => {
-    document.getElementById("imageBox").src = "{{$anime->value($tool3)}}";
+    document.getElementById("imageBox").src = "{{$anime->value("image$i")}}";
   }
   const runOnload = () => {
     updateImage();
@@ -39,15 +24,8 @@ $tool3 = $tool.=$tool2;
     }
     buttons[buttons.length-1].src = "{{asset('img/greenbox.jpg')}}";
 </script>
-<?php
-if($guesses == []){
-  $values = 1;
-}else{
-  $values = count($guesses)+1;
-}
-?>
 
-<h2 style="color: white;">This is guess number: {{$values}} out of 6 </h2><br>' ; 
+<h2 style="color: white;">This is guess number: {{count($guesses)+1}} out of 6 </h2><br>' ; 
 <form method="post" autocomplete="off" class = "autocomplete" action="{{route('game.guess')}}" style="">
   @csrf
   <input type="text" id="search" name="guess"/>
@@ -80,7 +58,7 @@ if($guesses == []){
   
 </script>
 
-@For($k = 1; $k < $values+1; $k++)
+@For($k = 1; $k < count($guesses)+1; $k++)
   @if ($k < 7)
     <script>
       function toggle{{$k}}(){
