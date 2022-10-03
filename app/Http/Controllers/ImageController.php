@@ -47,12 +47,16 @@ class ImageController extends Controller
         }
         $list = array();
         $animelist = Anime::all();
-        // dd(count($animelist));
         foreach ($animelist as $name){
             array_push($list, $name->name);
         }
         $maxGuesses = 6;
-        $guesses = $_SESSION['guesses'];
+        
+        if(!isset($_SESSION['guesses'])){
+            $guesses = [];
+        }else{
+            $guesses = $_SESSION['guesses'];
+        }
         if (
             in_array($anime->value("name"), $guesses)
             && count($guesses) <= $maxGuesses
