@@ -8,15 +8,11 @@
 
 <div style="margin: auto; width: 100%; text-align: center;    height:90%;padding:10px;">
 
-<img src= '{{$anime->value("image1")}}' id="imageBox" style="padding:0; width: 30%; height:350"><br><br>
-@for ($i = 0; $i < 7; $i++)
- @if ($i < 6)
-    <button onclick="toggle{{$i+1}}()" style="padding:0; width:auto; height:auto" ><img src='{{asset("img/box.jpg")}}' id="btn{{$i+1}}" class="img-btn"></button>
-  @endif
-@endfor
+<img src= '{{$anime->value("image6")}}' id="imageBox" style="padding:0; width: 30%; height:350"><br><br>
 
 @For($k = 1; $k < 7; $k++)
   @if ($k < 7)
+  <button onclick="toggle{{$k}}()" style="padding:0; width:auto; height:auto" ><img src='{{asset("img/box.jpg")}}' id="btn{{$k}}" class="img-btn"></button>
   
     <script>
       function toggle{{$k}}(){

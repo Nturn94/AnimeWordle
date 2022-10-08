@@ -4,11 +4,23 @@
 <div style="margin: auto; width: 100%; text-align: center;    height:90%;padding:10px;">
 
 <img src= '' id="imageBox" style="padding:0; width: 30%; height:350"><br><br>
-@for ($i = 0; $i < count($guesses)+1; $i++)
- @if ($i < 6)
-    <button onclick="toggle{{$i+1}}()" style="padding:0; width:auto; height:auto" ><img src='{{asset("img/box.jpg")}}' id="btn{{$i+1}}" class="img-btn"></button>
+@for ($i = 1; $i < count($guesses)+2; $i++)
+ @if ($i < 7)
+    <button onclick="toggle{{$i}}()" style="padding:0; width:auto; height:auto" ><img src='{{asset("img/box.jpg")}}' id="btn{{$i}}" class="img-btn"></button>
+    <script>
+      function toggle{{$i}}(){
+        const buttons = document.getElementsByClassName('img-btn');
+        for (var i = 0; i < buttons.length; i++) {
+          const buttonImage = buttons[i].src = "img/box.jpg";
+        }
+        document.getElementById("btn{{$i}}").src = "img/greenbox.jpg"; 
+        var myvar = "{{$anime->value("image$i")}}";
+        document.getElementById('imageBox').src = myvar;
+      }
+    </script>
   @endif
 @endfor
+@php ($i--)
 <script>
 
   const updateImage = () => {
@@ -59,22 +71,4 @@
   
 </script>
 
-@For($k = 1; $k < (count($guesses)+2); $k++)
-  @if ($k < 7)
-  
-    <script>
-      function toggle{{$k}}(){
-        const buttons = document.getElementsByClassName('img-btn');
-        for (var i = 0; i < buttons.length; i++) {
-          const buttonImage = buttons[i].src = "img/box.jpg";
-        }
-        document.getElementById("btn{{$k}}").src = "img/greenbox.jpg"; 
-        var myvar = "{{$anime->value("image$k")}}";
-        document.getElementById('imageBox').src = myvar;
-
-      }
-    </script>
-  @endif 
-@endfor
-@stop
 
