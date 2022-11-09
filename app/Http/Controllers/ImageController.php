@@ -45,11 +45,11 @@ class ImageController extends Controller
             $_SESSION['guesses'] = [];
             
         }
-        $list = array();
-        $animelist = Anime::all();
-        foreach ($animelist as $name){
-            array_push($list, $name->name);
-        }
+        // $list = array();
+        // $animelist = Anime::all();
+        // foreach ($animelist as $name){
+        //     array_push($list, $name->name);
+        // }
         $maxGuesses = 6;
         
         if(!isset($_SESSION['guesses'])){
@@ -81,7 +81,7 @@ class ImageController extends Controller
         return view('Game.view_game', [
             'anime' => $anime,
             'guesses' => $guesses,
-            'list' => $list,
+            // 'list' => $list,
         ]);
     }
     public function Scrape(){
