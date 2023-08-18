@@ -32,7 +32,7 @@ class ImageController extends Controller
     public function gameView(){
         session_start();
         // Calculate the current day number (based off the fixed starting date)
-        $dayNumber = Carbon::now()->diff('2023-08-18')->days;
+        $dayNumber = Carbon::now()->diff('2023-08-17')->days;
 
         // Since each day has it's own puzzle we can easily find today's puzzle by it's (day) ID
         $anime = Anime::where('id', $dayNumber);
